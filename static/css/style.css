@@ -1,0 +1,375 @@
+/* Основные стили в стиле Rammstein */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Hero секция с видео */
+.hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    width: 90%;
+}
+
+.rammstein-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 6rem;
+    letter-spacing: 0.5rem;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #ff0000,
+        0 0 40px #ff0000;
+    margin-bottom: 1rem;
+    animation: flicker 3s infinite alternate;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+}
+
+.scroll-down {
+    color: #fff;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* Навигация */
+.main-nav {
+    background-color: rgba(20, 20, 20, 0.95);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid #ff0000;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.nav-menu {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link:hover {
+    color: #ff0000;
+    background-color: rgba(255, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+/* Основной контент */
+.container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ff0000;
+    letter-spacing: 0.2rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 3px;
+    background-color: #ff0000;
+    margin: 0.5rem auto;
+}
+
+.intro-section {
+    text-align: center;
+    padding: 3rem 0;
+    border-bottom: 1px solid #333;
+    margin-bottom: 3rem;
+}
+
+.section-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    color: #ccc;
+}
+
+.flame-decoration {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.flame-decoration i {
+    color: #ff3300;
+    font-size: 2rem;
+    animation: flame 1.5s infinite alternate;
+}
+
+.flame-decoration i:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.flame-decoration i:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Секция с альбомом */
+.album-section {
+    margin-bottom: 4rem;
+}
+
+.album-card {
+    display: flex;
+    background-color: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+    border: 1px solid #333;
+}
+
+.album-cover {
+    width: 300px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.album-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.album-card:hover .album-image {
+    transform: scale(1.05);
+}
+
+.album-info {
+    padding: 2rem;
+    flex: 1;
+}
+
+.album-info h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.album-info p {
+    color: #aaa;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.1rem;
+}
+
+.btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+}
+
+/* Футер */
+.footer {
+    background-color: #111;
+    padding: 3rem 0;
+    text-align: center;
+    border-top: 1px solid #333;
+}
+
+.footer-content p {
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.social-links {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-links a {
+    color: #aaa;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #ff0000;
+    transform: translateY(-5px);
+}
+
+/* Анимации */
+@keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow:
+            0 0 10px #ff0000,
+            0 0 20px #ff0000,
+            0 0 30px #ff0000,
+            0 0 40px #ff0000;
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes flame {
+    from {
+        color: #ff3300;
+        transform: scale(1);
+    }
+    to {
+        color: #ff9900;
+        transform: scale(1.2);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .rammstein-title {
+        font-size: 4rem;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .album-card {
+        flex-direction: column;
+    }
+    
+    .album-cover {
+        width: 100%;
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .rammstein-title {
+        font-size: 2.5rem;
+        letter-spacing: 0.3rem;
+    }
+    
+    .tagline {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+</head>
+<audio autoplay style="display:none;">
+    <source src="/static/audio/enter.mp3" type="audio/mpeg">
+</audio>
+<body>
+    <section class="hero">
+        <div class="video-container">
+            <video autoplay muted loop playsinline class="background-video">
+                <source src="/static/video/background.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay"></div>
+            
+            <div class="hero-content">
+                <h1 class="rammstein-title">R A M M S T E I N</h1>
+                <p class="tagline">"Do you want to burn with me?"</p>
+                <a href="#main-content" class="scroll-down">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <nav class="main-nav" id="main-content">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+            <li><a href="/shop/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="intro-section">
+            <h2 class="section-title">FEUER FREI!</h2>
+            <p class="section-text">
+                Rammstein is a German Neue Deutsche Härte band formed in Berlin in 1994. 
+                The band's iconic industrial metal sound, pyrotechnic live performances, 
+                and provocative lyrics have made them one of the most successful and 
+                controversial acts in music history.
+            </p>
+        </section>
+
+        <section class="album-section">
+            <h2 class="section-title">LATEST RELEASE</h2>
+            <div class="album-card">
+                <div class="album-cover">
+                    <img src="/static/img/albums/zeit.png" 
+                    alt="Zeit Album Cover" 
+                    class="album-image">
+                </div>
+                <div class="album-info">
+                    <h3>Zeit (2022)</h3>
+                    <p>The eighth studio album by Rammstein, exploring themes of time, mortality, and reflection.</p>
+                    <a href="https://www.youtube.com/watch?v=EbHGS_bVkXY" class="btn">Listen Now</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+
+    <style>
+        .tickets-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #0a0000, #000000);
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+        
+        .page-header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            color: #ccc;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Поисковая панель */
+        .search-panel {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 15px;
+            border: 2px solid #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-title {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 992px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .search-input {
+            position: relative;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff0000;
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .search-btn {
+            padding: 1rem 2rem;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .search-btn:hover {
+            background: #cc0000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .search-btn.secondary {
+            background: transparent;
+            border: 2px solid #ff0000;
+        }
+        
+        .search-btn.secondary:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+        
+        .concerts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .concerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #ff0000;
+        }
+        
+        .concerts-header h2 {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+        
+        .concerts-count {
+            color: #ff0000;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .concerts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            .concerts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .concert-card {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .concert-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.2);
+        }
+        
+        .concert-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        
+        .concert-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #222, #444);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .concert-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .concert-card:hover .concert-image img {
+            transform: scale(1.05);
+        }
+        
+        .concert-date {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-align: center;
+            min-width: 70px;
+        }
+        
+        .concert-date .day {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            color: #ff0000;
+        }
+        
+        .concert-date .month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .concert-info {
+            padding: 1.5rem;
+        }
+        
+        .concert-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .concert-location {
+            color: #ff0000;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .concert-details {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .concert-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .concert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #333;
+        }
+        
+        .concert-price {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        .ticket-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ticket-btn:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .ticket-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .load-more {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .no-concerts {
+            text-align: center;
+            padding: 4rem 2rem;
+            grid-column: 1 / -1;
+        }
+        
+        .no-concerts i {
+            font-size: 4rem;
+            color: #ff0000;
+            margin-bottom: 1.5rem;
+        }
+        
+        .no-concerts h3 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .no-concerts p {
+            color: #ccc;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #ff0000;
+            box-shadow: 0 20px 50px rgba(255, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background: rgba(255, 0, 0, 0.1);
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: transparent;
+            border: none;
+            color: #ff0000;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .ticket-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .ticket-form label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .ticket-form select,
+        .ticket-form input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .ticket-form select:focus,
+        .ticket-form input:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+        
+        .ticket-summary {
+            background: rgba(255, 0, 0, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+        
+        .summary-row.total {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-top: 2px solid #333;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .summary-row.total .amount {
+            color: #ff0000;
+        }
+        
+        .buy-ticket-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .buy-ticket-btn:hover {
+            background: #cc0000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .search-panel {
+                padding: 1.5rem;
+            }
+            
+            .search-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/shop/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link active"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="tickets-page">
+        <div class="page-header">
+            <h1>TOUR TICKETS 2026</h1>
+            <p>Find Rammstein tickets for upcoming stadium shows across Europe.</p>
+        </div>
+        
+        
+        <div class="search-panel">
+            <h3 class="search-title">FIND YOUR CONCERT</h3>
+            
+            <form class="search-form" id="searchForm">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" 
+                           id="searchEvents" 
+                           placeholder="Search by city or venue..."
+                           autocomplete="off">
+                </div>
+                
+                <div class="search-input">
+                    <i class="fas fa-calendar"></i>
+                    <input type="text" 
+                           id="searchDate" 
+                           placeholder="Select date..."
+                           readonly>
+                </div>
+                
+                <div class="search-input">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" 
+                           id="searchLocation" 
+                           placeholder="Country or city..."
+                           list="locations">
+                    <datalist id="locations">
+                        <option value="Germany">
+                        <option value="France">
+                        <option value="UK">
+                        <option value="Spain">
+                        <option value="Italy">
+                        <option value="Netherlands">
+                        <option value="Belgium">
+                        <option value="Switzerland">
+                        <option value="Austria">
+                        <option value="Poland">
+                    </datalist>
+                </div>
+                
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+            
+            <div class="search-buttons">
+                <button class="search-btn secondary" id="showAllBtn">
+                    <i class="fas fa-list"></i> Show All Concerts
+                </button>
+                <button class="search-btn secondary" id="resetBtn">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+            </div>
+        </div>
+        
+        <div class="concerts-container">
+            <div class="concerts-header">
+                <h2>UPCOMING CONCERTS</h2>
+                <div class="concerts-count" id="concertsCount">8 concerts found</div>
+            </div>
+            
+            <div class="concerts-grid" id="concertsGrid">
+            </div>
+            
+            <div class="load-more">
+                <button class="search-btn secondary" id="loadMoreBtn">
+                    <i class="fas fa-plus"></i> Load More Concerts
+                </button>
+            </div>
+        </div>
+        
+        
+        <div style="text-align: center; margin: 3rem 0;">
+            <a href="/" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="ticketModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Buy Tickets</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="ticket-form" id="ticketForm">
+                    <div class="form-group">
+                        <label for="ticketType">Ticket Type</label>
+                        <select id="ticketType" required>
+                            <option value="">Select ticket type</option>
+                            <option value="general">General Admission - €80.00</option>
+                            <option value="vip">VIP Experience - €200.00</option>
+                            <option value="front">Front Stage - €150.00</option>
+                            <option value="seated">Seated Ticket - €130.00</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" 
+                               id="quantity" 
+                               min="1" 
+                               max="8" 
+                               value="1" 
+                               required>
+                    </div>
+                    
+                    <div class="ticket-summary">
+                        <h4 style="color: #fff; margin-bottom: 1rem;">Order Summary</h4>
+                        <div class="summary-row">
+                            <span>Concert:</span>
+                            <span id="modalConcert">Stadium Tour 2026</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Date:</span>
+                            <span id="modalDate">June 15, 2026</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Location:</span>
+                            <span id="modalLocation">Berlin, Germany</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Ticket Type:</span>
+                            <span id="modalTicketType">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Quantity:</span>
+                            <span id="modalQuantity">1</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Price per ticket:</span>
+                            <span id="modalPrice">€0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span class="amount" id="modalTotal">€0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="buy-ticket-btn">
+                        <i class="fas fa-ticket-alt"></i> Complete Purchase
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const concertsData = [
+                {
+                    id: 1,
+                    title: "Stadium Tour 2026",
+                    location: "Berlin, Germany",
+                    venue: "Olympiastadion Berlin",
+                    date: "2026-06-15",
+                    image: "static/img/concerts/Berlin, Germany • Olympiastadion Berlin.png",
+                    description: "Epic stadium show with full pyrotechnics production",
+                    price: 80.00,
+                    available: true,
+                    badge: "SELLING FAST"
+                },
+                {
+                    id: 2,
+                    title: "European Stadium Tour",
+                    location: "Paris, France",
+                    venue: "Stade de France",
+                    date: "2026-06-22",
+                    image: "static/img/concerts/Paris, France • Stade de France.png",
+                    description: "French leg of the massive stadium tour",
+                    price: 90.00,
+                    available: true,
+                    badge: "VIP AVAILABLE"
+                },
+                {
+                    id: 3,
+                    title: "Feuer & Flamme",
+                    location: "Madrid, Spain",
+                    venue: "Estadio Metropolitano",
+                    date: "2026-07-05",
+                    image: "static/img/concerts/Madrid, Spain • Estadio Metropolitano.png",
+                    description: "Spanish concert with special guests",
+                    price: 70.00,
+                    available: true
+                },
+                {
+                    id: 4,
+                    title: "Zeit Live Experience",
+                    location: "London, UK",
+                    venue: "Wembley Stadium",
+                    date: "2026-07-12",
+                    image: "static/img/concerts/London, UK • Wembley Stadium.png",
+                    description: "Special Zeit album performance",
+                    price: 90.00,
+                    available: true,
+                    badge: "NEW DATE"
+                },
+                {
+                    id: 5,
+                    title: "Mutter Anniversary Show",
+                    location: "Munich, Germany",
+                    venue: "Allianz Arena",
+                    date: "2026-07-20",
+                    image: "static/img/concerts/Munich, Germany • Allianz Arena.png",
+                    description: "Celebrating 23 years of Mutter album",
+                    price: 100.00,
+                    available: true
+                },
+                {
+                    id: 6,
+                    title: "Nordic Fire Tour",
+                    location: "Stockholm, Sweden",
+                    venue: "Friends Arena",
+                    date: "2026-08-02",
+                    image: "static/img/concerts/Stockholm, Sweden • Friends Arena.png",
+                    description: "Scandinavian exclusive performance",
+                    price: 80.00,
+                    available: true
+                },
+                {
+                    id: 7,
+                    title: "Alpine Pyro Spectacle",
+                    location: "Zurich, Switzerland",
+                    venue: "Letzigrund Stadium",
+                    date: "2026-08-15",
+                    image: "static/img/concerts/Zurich, Switzerland • Letzigrund Stadium.png",
+                    description: "Mountain backdrop with enhanced pyro",
+                    price: 110.00,
+                    available: false,
+                    badge: "SOLD OUT"
+                },
+                {
+                    id: 8,
+                    title: "Mediterranean Nights",
+                    location: "Rome, Italy",
+                    venue: "Stadio Olimpico",
+                    date: "2026-08-25",
+                    image: "static/img/concerts/Rome, Italy • Stadio Olimpico.png",
+                    description: "Open air summer concert in Rome",
+                    price: 80.00,
+                    available: true
+                },
+                {
+                    id: 9,
+                    title: "Eastern European Tour",
+                    location: "Warsaw, Poland",
+                    venue: "PGE Narodowy",
+                    date: "2026-09-05",
+                    image: "static/img/concerts/Warsaw, Poland • PGE Narodowy.png",
+                    description: "First time in Poland since 2019",
+                    price: 74.00,
+                    available: true
+                },
+                {
+                    id: 10,
+                    title: "Benefit Concert for Charity",
+                    location: "Vienna, Austria",
+                    venue: "Ernst-Happel-Stadion",
+                    date: "2026-09-15",
+                    image: "static/img/concerts/Vienna, Austria • Ernst-Happel-Stadion.png",
+                    description: "Special charity event with acoustic set",
+                    price: 140.00,
+                    available: true,
+                    badge: "CHARITY"
+                }
+            ];
+            
+            const concertsGrid = document.getElementById('concertsGrid');
+            const concertsCount = document.getElementById('concertsCount');
+            const searchForm = document.getElementById('searchForm');
+            const searchEvents = document.getElementById('searchEvents');
+            const searchDate = document.getElementById('searchDate');
+            const searchLocation = document.getElementById('searchLocation');
+            const showAllBtn = document.getElementById('showAllBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const ticketModal = document.getElementById('ticketModal');
+            const closeModal = document.getElementById('closeModal');
+            const ticketForm = document.getElementById('ticketForm');
+            
+            let displayedConcerts = 6;
+            let filteredConcerts = [...concertsData];
+            let currentConcert = null;
+            
+            flatpickr(searchDate, {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                onChange: function(selectedDates, dateStr) {
+                    filterConcerts();
+                }
+            });
+            
+            function displayConcerts(concerts) {
+                concertsGrid.innerHTML = '';
+                
+                if (concerts.length === 0) {
+                    concertsGrid.innerHTML = `
+                        <div class="no-concerts">
+                            <i class="fas fa-ticket-alt"></i>
+                            <h3>No concerts found</h3>
+                            <p>Try changing your search criteria or check back later for new dates.</p>
+                            <button class="search-btn secondary" onclick="resetFilters()">
+                                <i class="fas fa-redo"></i> Reset Filters
+                            </button>
+                        </div>
+                    `;
+                    concertsCount.textContent = '0 concerts found';
+                    return;
+                }
+                
+                const concertsToShow = concerts.slice(0, displayedConcerts);
+                
+                concertsToShow.forEach(concert => {
+                    const concertDate = new Date(concert.date);
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    
+                    const concertCard = document.createElement('div');
+                    concertCard.className = 'concert-card';
+                    concertCard.setAttribute('data-id', concert.id);
+                    
+                    const badge = concert.badge ? 
+                        `<div class="concert-badge">${concert.badge}</div>` : '';
+                    
+                    const day = concertDate.getDate();
+                    const month = monthNames[concertDate.getMonth()];
+                    const year = concertDate.getFullYear();
+                    
+                    concertCard.innerHTML = `
+                        ${badge}
+                        <div class="concert-image">
+                            <img src="${concert.image}" 
+                                 alt="${concert.title}"
+                                 onerror="this.src='https://images.unsplash.com/photo-1571266028245-95a3d3e7b3d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'">
+                            <div class="concert-date">
+                                <span class="day">${day}</span>
+                                <span class="month">${month}</span>
+                            </div>
+                        </div>
+                        <div class="concert-info">
+                            <h3 class="concert-title">${concert.title}</h3>
+                            <div class="concert-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${concert.location} • ${concert.venue}
+                            </div>
+                            <div class="concert-details">
+                                <div class="concert-detail">
+                                    <i class="far fa-calendar"></i>
+                                    ${month} ${day}, ${year}
+                                </div>
+                                <div class="concert-detail">
+                                    <i class="fas fa-info-circle"></i>
+                                    ${concert.description}
+                                </div>
+                            </div>
+                            <div class="concert-footer">
+                                <div class="concert-price">€${concert.price.toFixed(2)}</div>
+                                <button class="ticket-btn ${!concert.available ? 'disabled' : ''}" 
+                                        data-id="${concert.id}"
+                                        ${!concert.available ? 'disabled' : ''}>
+                                    <i class="fas fa-ticket-alt"></i>
+                                    ${concert.available ? 'Buy Tickets' : 'Sold Out'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    concertsGrid.appendChild(concertCard);
+                });
+                
+                concertsCount.textContent = `${concerts.length} concerts found`;
+                
+                loadMoreBtn.style.display = concerts.length > displayedConcerts ? 'block' : 'none';
+                
+                document.querySelectorAll('.ticket-btn:not(.disabled)').forEach(button => {
+                    button.addEventListener('click', openTicketModal);
+                });
+            }
+            
+            function filterConcerts() {
+                const searchTerm = searchEvents.value.toLowerCase();
+                const dateTerm = searchDate.value;
+                const locationTerm = searchLocation.value.toLowerCase();
+                
+                filteredConcerts = concertsData.filter(concert => {
+                    const matchesSearch = searchTerm === '' || 
+                        concert.title.toLowerCase().includes(searchTerm) ||
+                        concert.location.toLowerCase().includes(searchTerm) ||
+                        concert.venue.toLowerCase().includes(searchTerm);
+                    
+                    const matchesDate = dateTerm === '' || concert.date === dateTerm;
+                    
+                    const matchesLocation = locationTerm === '' || 
+                        concert.location.toLowerCase().includes(locationTerm);
+                    
+                    return matchesSearch && matchesDate && matchesLocation;
+                });
+                
+                displayedConcerts = 6;
+                displayConcerts(filteredConcerts);
+            }
+            
+            function showAllConcerts() {
+                filteredConcerts = [...concertsData];
+                displayedConcerts = concertsData.length;
+                displayConcerts(filteredConcerts);
+                
+                searchEvents.value = '';
+                searchDate._flatpickr.clear();
+                searchLocation.value = '';
+            }
+            
+            function resetFilters() {
+                searchEvents.value = '';
+                searchDate._flatpickr.clear();
+                searchLocation.value = '';
+                filteredConcerts = [...concertsData];
+                displayedConcerts = 6;
+                displayConcerts(filteredConcerts);
+            }
+            
+            function loadMoreConcerts() {
+                displayedConcerts += 3;
+                displayConcerts(filteredConcerts);
+            }
+            
+            function openTicketModal(event) {
+                const concertId = event.currentTarget.getAttribute('data-id');
+                currentConcert = concertsData.find(c => c.id == concertId);
+                
+                if (!currentConcert) return;
+                
+                const concertDate = new Date(currentConcert.date);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                
+                document.getElementById('modalConcert').textContent = currentConcert.title;
+                document.getElementById('modalDate').textContent = concertDate.toLocaleDateString('en-US', options);
+                document.getElementById('modalLocation').textContent = `${currentConcert.venue}, ${currentConcert.location}`;
+                
+                document.getElementById('ticketType').value = '';
+                document.getElementById('quantity').value = 1;
+                updateTicketSummary();
+                
+                ticketModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function updateTicketSummary() {
+                const ticketType = document.getElementById('ticketType');
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                
+                let pricePerTicket = 0;
+                let ticketTypeName = '-';
+                
+                if (ticketType.value) {
+                    const prices = {
+                        'general': currentConcert?.price || 80.00,
+                        'vip': 200.00,
+                        'front': 150.00,
+                        'seated': 130.00
+                    };
+                    
+                    const names = {
+                        'general': 'General Admission',
+                        'vip': 'VIP Experience',
+                        'front': 'Front Stage',
+                        'seated': 'Seated Ticket'
+                    };
+                    
+                    pricePerTicket = prices[ticketType.value];
+                    ticketTypeName = names[ticketType.value];
+                }
+                
+                const total = pricePerTicket * quantity;
+                
+                document.getElementById('modalTicketType').textContent = ticketTypeName;
+                document.getElementById('modalQuantity').textContent = quantity;
+                document.getElementById('modalPrice').textContent = `€${pricePerTicket.toFixed(2)}`;
+                document.getElementById('modalTotal').textContent = `€${total.toFixed(2)}`;
+            }
+            
+            function closeTicketModal() {
+                ticketModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            function handleTicketPurchase(event) {
+                event.preventDefault();
+                
+                const ticketType = document.getElementById('ticketType').value;
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                
+                if (!ticketType) {
+                    alert('Please select a ticket type');
+                    return;
+                }
+                
+                
+                const ticketNames = {
+                    'general': 'General Admission',
+                    'vip': 'VIP Experience',
+                    'front': 'Front Stage',
+                    'seated': 'Seated Ticket'
+                };
+                
+                const prices = {
+                    'general': currentConcert?.price || 89.99,
+                    'vip': 199.99,
+                    'front': 149.99,
+                    'seated': 129.99
+                };
+                
+                const total = prices[ticketType] * quantity;
+                
+                alert(`🎫 Purchase Successful!\n\n` +
+                      `Concert: ${currentConcert.title}\n` +
+                      `Tickets: ${quantity}x ${ticketNames[ticketType]}\n` +
+                      `Total: €${total.toFixed(2)}\n\n` +
+                      `An email confirmation has been sent to you.`);
+                
+                closeTicketModal();
+            }
+            
+            searchForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                filterConcerts();
+            });
+            
+            searchEvents.addEventListener('input', filterConcerts);
+            searchLocation.addEventListener('input', filterConcerts);
+            showAllBtn.addEventListener('click', showAllConcerts);
+            resetBtn.addEventListener('click', resetFilters);
+            loadMoreBtn.addEventListener('click', loadMoreConcerts);
+            closeModal.addEventListener('click', closeTicketModal);
+            ticketModal.addEventListener('click', function(event) {
+                if (event.target === ticketModal) {
+                    closeTicketModal();
+                }
+            });
+            
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && ticketModal.classList.contains('active')) {
+                    closeTicketModal();
+                }
+            });
+            
+            document.getElementById('ticketType').addEventListener('change', updateTicketSummary);
+            document.getElementById('quantity').addEventListener('input', updateTicketSummary);
+            
+            ticketForm.addEventListener('submit', handleTicketPurchase);
+            
+            displayConcerts(filteredConcerts);
+            
+        });
+    </script>
+</body>
+</html>

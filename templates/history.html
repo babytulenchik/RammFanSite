@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+ 
+    <style>
+        .history-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #0a0000, #000000);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .page-title h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .page-title p {
+            color: #ccc;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                #ff0000 5%, 
+                #ff0000 95%, 
+                transparent);
+            z-index: 1;
+        }
+        
+        .timeline-items {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            width: 45%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item.left {
+            float: left;
+            clear: left;
+            text-align: right;
+            padding-right: 40px;
+        }
+        
+        .timeline-item.right {
+            float: right;
+            clear: right;
+            text-align: left;
+            padding-left: 40px;
+        }
+        
+        .timeline-items::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+        
+        .timeline-content {
+            position: relative;
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .timeline-content:hover {
+            border-color: #ff0000;
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .timeline-date {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #ff0000;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        .timeline-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .timeline-description {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        .photo-container {
+            position: relative;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-link {
+            display: block;
+            position: relative;
+            text-decoration: none;
+        }
+        
+        .photo-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-container:hover .photo-image {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .photo-container:hover .photo-overlay {
+            opacity: 1;
+        }
+        
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .photo-container:hover .play-icon {
+            transform: scale(1);
+            background-color: rgba(255, 0, 0, 1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        .photo-caption {
+            margin-top: 10px;
+            text-align: center;
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        .section-icon {
+            position: absolute;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #222;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ff0000;
+            z-index: 3;
+        }
+        
+        .timeline-item.left .section-icon {
+            right: -55px;
+        }
+        
+        .timeline-item.right .section-icon {
+            left: -55px;
+        }
+        
+        .timeline-facts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .fact-tag {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #ff6666;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+        
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-top:hover {
+            background-color: rgba(255, 0, 0, 1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+        
+        @media (max-width: 992px) {
+            .timeline-item {
+                width: 90%;
+                float: none !important;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center !important;
+                padding: 0 20px !important;
+            }
+            
+            .section-icon {
+                position: relative;
+                top: 0;
+                left: 0 !important;
+                right: 0 !important;
+                margin: -20px auto 15px;
+            }
+            
+            .photo-image {
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline-title {
+                font-size: 1.5rem;
+            }
+            
+            .timeline-description {
+                font-size: 1rem;
+            }
+        }
+        
+        .nav-link.active {
+            color: #ff0000;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link active"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="history-page">
+        <div class="page-title">
+            <h1>RAMMSTEIN HISTORY</h1>
+            <p>Explore the journey of Rammstein through their most important milestones and iconic music videos.</p>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-items">
+
+                <div class="timeline-item left">
+                    <div class="section-icon">1994</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">January 1994</div>
+                        <h3 class="timeline-title">The Birth of Rammstein</h3>
+                        <div class="timeline-description">
+                            Rammstein was formed in Berlin by guitarist Richard Z. Kruspe. 
+                            The band's name was inspired by the Ramstein airshow disaster, 
+                            adding an extra 'm' to make it "Rammstein" (ramming stone).
+                        </div>
+                        
+                        
+                        <div class="photo-container">
+                            <a href="https://vk.com/video-208769825_456239355" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm1994.png" 
+                                     class="photo-image" 
+                                     alt="Early Rammstein live 1994">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">Formation</span>
+                            <span class="fact-tag">Berlin</span>
+                            <span class="fact-tag">Original Lineup</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="section-icon">1995</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">September 1995</div>
+                        <h3 class="timeline-title">"Herzeleid" - Debut Album</h3>
+                        <div class="timeline-description">
+                            Release of their first studio album "Herzeleid" (Heartache). 
+                            The album established their signature industrial metal sound 
+                            and laid the foundation for their future success.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=Gmn4aNGr5E8" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm1995.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">First Album</span>
+                            <span class="fact-tag">Industrial Metal</span>
+                            <span class="fact-tag">German Lyrics</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="section-icon">1997</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">August 1997</div>
+                        <h3 class="timeline-title">"Sehnsucht" & "Du Hast"</h3>
+                        <div class="timeline-description">
+                            Release of the second album "Sehnsucht" (Longing) featuring 
+                            the iconic single "Du Hast". The song became their international 
+                            breakthrough and one of their most recognizable tracks.
+                        </div>
+
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=W3q8Od5qJio" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm1997.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">International Breakthrough</span>
+                            <span class="fact-tag">MTV Award</span>
+                            <span class="fact-tag">Iconic Single</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="section-icon">2001</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">April 2001</div>
+                        <h3 class="timeline-title">"Mutter" - Critical Acclaim</h3>
+                        <div class="timeline-description">
+                            "Mutter" (Mother) is released, considered by many fans and critics 
+                            as their magnum opus. The album featured a more refined sound and 
+                            complex lyrical themes.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=gNdnVVHfseA" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm2001.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">Critical Success</span>
+                            <span class="fact-tag">Concept Album</span>
+                            <span class="fact-tag">Gold Certification</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="section-icon">2004</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">October 2004</div>
+                        <h3 class="timeline-title">"Reise, Reise" & "Rosenrot"</h3>
+                        <div class="timeline-description">
+                            Release of "Reise, Reise" (Arise, Arise) followed by "Rosenrot" 
+                            (Rose Red). These albums continued their exploration of diverse 
+                            musical styles and themes.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=af59U2BRRAU" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm2004.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">Nautical Themes</span>
+                            <span class="fact-tag">Controversial Videos</span>
+                            <span class="fact-tag">European Success</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="section-icon">2009</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">October 2009</div>
+                        <h3 class="timeline-title">"Liebe ist für alle da"</h3>
+                        <div class="timeline-description">
+                            Release of their sixth studio album "Liebe ist für alle da" 
+                            (Love is there for everyone). The album featured some of their 
+                            most controversial lyrics and marked a return to heavier sounds.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=IxuEtL7gxoM" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm2009.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">Explicit Content</span>
+                            <span class="fact-tag">Banned in Germany</span>
+                            <span class="fact-tag">Heavy Sound</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="section-icon">2019</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">May 2019</div>
+                        <h3 class="timeline-title">The Long-Awaited Return</h3>
+                        <div class="timeline-description">
+                            After 10 years of silence, Rammstein returns with their 
+                            self-titled seventh album. The release was accompanied by 
+                            a massive stadium tour across Europe.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=NeQM1c-XCDc" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm2019.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="timeline-facts">
+                            <span class="fact-tag">10-Year Hiatus</span>
+                            <span class="fact-tag">Stadium Tour</span>
+                            <span class="fact-tag">Chart Topper</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="section-icon">2022</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">April 2022</div>
+                        <h3 class="timeline-title">"Zeit" - Reflections on Time</h3>
+                        <div class="timeline-description">
+                            Release of their eighth studio album "Zeit" (Time), exploring 
+                            themes of mortality, time, and reflection. The album shows a 
+                            more mature and contemplative side of the band.
+                        </div>
+                        
+                        <div class="photo-container">
+                            <a href="https://www.youtube.com/watch?v=EbHGS_bVkXY" class="photo-link" target="_blank">
+                                <img src="static/img/history/ramm2022.png" 
+                                     class="photo-image" 
+                                     alt="Описание фото">
+                                <div class="photo-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="timeline-facts">
+                            <span class="fact-tag">Mature Themes</span>
+                            <span class="fact-tag">Reflective Lyrics</span>
+                            <span class="fact-tag">Critical Acclaim</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="back-navigation" style="text-align: center; margin: 3rem 0;">
+            <a href="/" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+        
+        <a href="#" class="scroll-top" id="scrollTop">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const scrollTopButton = document.getElementById('scrollTop');
+            
+            function checkVisibility() {
+                timelineItems.forEach(item => {
+                    const rect = item.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    if (rect.top <= windowHeight * 0.8) {
+                        item.classList.add('visible');
+                    }
+                });
+                
+                if (window.scrollY > 300) {
+                    scrollTopButton.classList.add('visible');
+                } else {
+                    scrollTopButton.classList.remove('visible');
+                }
+            }
+            
+            checkVisibility();
+            window.addEventListener('scroll', checkVisibility);
+            
+            scrollTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            const photoContainers = document.querySelectorAll('.photo-container');
+            photoContainers.forEach(container => {
+                container.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                container.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

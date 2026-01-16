@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+
+    <style>
+        .checkout-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #0a0000, #000000);
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+        }
+        
+        .checkout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        
+        @media (max-width: 992px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .checkout-section {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+        
+        .order-summary {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .order-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-item-name {
+            color: #ccc;
+        }
+        
+        .order-item-quantity {
+            color: #ff0000;
+        }
+        
+        .order-item-price {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        
+        .summary-row.total {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-top: 2px solid #333;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .summary-row.total .amount {
+            color: #ff0000;
+        }
+        
+        .place-order-btn {
+            width: 100%;
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+        
+        .place-order-btn:hover {
+            background: #cc0000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .place-order-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .success-message i {
+            font-size: 5rem;
+            color: #00aa00;
+            margin-bottom: 2rem;
+        }
+        
+        .success-message h2 {
+            color: #00aa00;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .success-message p {
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+                <li class="cart-indicator">
+                    <a href="/cart" class="nav-link cart-link">
+                        <i class="fas fa-shopping-cart"></i> CART
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="checkout-page">
+        <div class="page-title">
+            <h1>CHECKOUT</h1>
+        </div>
+        
+        <div class="checkout-container">
+            <div id="checkoutContent">
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-spotify"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutContent = document.getElementById('checkoutContent');
+            const cartCount = document.getElementById('cartCount');
+            let currentCart = null;
+            
+            async function loadCheckout() {
+                try {
+                    const response = await fetch('/shop/api/cart');
+                    currentCart = await response.json();
+                    
+                    cartCount.textContent = currentCart.total || 0;
+                    
+                    if (currentCart.items.length === 0) {
+                        showEmptyCart();
+                        return;
+                    }
+                    
+                    showCheckoutForm(currentCart);
+                } catch (error) {
+                    console.error('Error loading cart:', error);
+                    checkoutContent.innerHTML = `
+                        <div class="checkout-section">
+                            <h2 style="color: #ff0000; text-align: center;">
+                                <i class="fas fa-exclamation-triangle"></i> Error loading checkout
+                            </h2>
+                        </div>
+                    `;
+                }
+            }
+            
+            function showEmptyCart() {
+                checkoutContent.innerHTML = `
+                    <div class="checkout-section" style="text-align: center; padding: 4rem 2rem;">
+                        <h2 style="color: #ff0000; margin-bottom: 1rem;">
+                            <i class="fas fa-shopping-cart"></i> Your cart is empty
+                        </h2>
+                        <p style="color: #ccc; margin-bottom: 2rem;">
+                            Add some items to your cart before checking out.
+                        </p>
+                        <a href="/merchandise" class="btn">
+                            <i class="fas fa-store"></i> Browse Merchandise
+                        </a>
+                    </div>
+                `;
+            }
+            
+            function showCheckoutForm(cart) {
+                const subtotal = cart.subtotal;
+                const shipping = subtotal > 100 ? 0 : 9.99;
+                const total = subtotal + shipping;
+                
+                let itemsHTML = '';
+                cart.items.forEach(item => {
+                    itemsHTML += `
+                        <div class="order-item">
+                            <div class="order-item-name">${item.name}</div>
+                            <div class="order-item-quantity">× ${item.quantity}</div>
+                            <div class="order-item-price">€${(item.price * item.quantity).toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+                
+                checkoutContent.innerHTML = `
+                    <div class="checkout-content">
+                        <div>
+                            <div class="checkout-section">
+                                <h3 class="section-title">Contact Information</h3>
+                                <form id="checkoutForm">
+                                    <div class="form-group">
+                                        <label for="name">Full Name *</label>
+                                        <input type="text" id="name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address *</label>
+                                        <input type="email" id="email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number *</label>
+                                        <input type="tel" id="phone" name="phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Shipping Address *</label>
+                                        <textarea id="address" name="address" rows="3" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notes">Order Notes (Optional)</label>
+                                        <textarea id="notes" name="notes" rows="2" 
+                                                  placeholder="Special instructions for your order..."></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="checkout-section">
+                                <h3 class="section-title">Payment Information</h3>
+                                <p style="color: #ccc; margin-bottom: 1.5rem;">
+                                    <i class="fas fa-info-circle"></i> 
+                                    This is a demo store. No real payments will be processed.
+                                </p>
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number</label>
+                                    <input type="text" id="cardNumber" value="4242 4242 4242 4242" readonly>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="expiry">Expiry Date</label>
+                                        <input type="text" id="expiry" value="12/25" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvc">CVC</label>
+                                        <input type="text" id="cvc" value="123" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-summary">
+                            <h3 class="section-title">Order Summary</h3>
+                            <div class="order-items">
+                                ${itemsHTML}
+                            </div>
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span>€${subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping</span>
+                                <span>${shipping === 0 ? 'FREE' : '€' + shipping.toFixed(2)}</span>
+                            </div>
+                            ${shipping === 0 ? 
+                                `<div class="summary-row" style="color: #00aa00;">
+                                    <span><i class="fas fa-check"></i> Free shipping</span>
+                                </div>` : ''
+                            }
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span class="amount">€${total.toFixed(2)}</span>
+                            </div>
+                            <button class="place-order-btn" id="placeOrderBtn">
+                                <i class="fas fa-lock"></i> Place Order
+                            </button>
+                            <a href="/cart" style="display: block; text-align: center; color: #ff0000; margin-top: 1rem;">
+                                <i class="fas fa-arrow-left"></i> Back to Cart
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('placeOrderBtn').addEventListener('click', placeOrder);
+            }
+            
+            async function placeOrder() {
+                const form = document.getElementById('checkoutForm');
+                const button = document.getElementById('placeOrderBtn');
+                
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
+                const formData = new FormData(form);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const phone = formData.get('phone');
+                
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                try {
+                    const response = await fetch('/shop/api/order/create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            name: name,
+                            email: email,
+                            phone: phone
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showSuccessMessage(result);
+                        cartCount.textContent = '0';
+                    } else {
+                        throw new Error('Order creation failed');
+                    }
+                } catch (error) {
+                    console.error('Error placing order:', error);
+                    
+                    checkoutContent.innerHTML = `
+                        <div class="checkout-section" style="text-align: center; padding: 4rem 2rem;">
+                            <h2 style="color: #ff0000; margin-bottom: 1rem;">
+                                <i class="fas fa-exclamation-triangle"></i> Order Failed
+                            </h2>
+                            <p style="color: #ccc; margin-bottom: 2rem;">
+                                There was an error processing your order. Please try again.
+                            </p>
+                            <button class="btn" onclick="window.location.reload()">
+                                <i class="fas fa-redo"></i> Try Again
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+            
+            function showSuccessMessage(result) {
+                checkoutContent.innerHTML = `
+                    <div class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <h2>Order Confirmed!</h2>
+                        <p>Thank you for your order. Your Rammstein merchandise is on its way.</p>
+                        <div style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+                            <p style="color: #fff; margin-bottom: 0.5rem;">
+                                <strong>Order Number:</strong> ${result.order_number}
+                            </p>
+                            <p style="color: #ccc;">
+                                <strong>Total:</strong> €${currentCart.subtotal.toFixed(2)}
+                            </p>
+                        </div>
+                        <p style="color: #aaa; font-size: 0.9rem;">
+                            A confirmation email has been sent to your email address.
+                        </p>
+                        <div style="margin-top: 3rem;">
+                            <a href="/merchandise" class="btn" style="margin-right: 1rem;">
+                                <i class="fas fa-store"></i> Continue Shopping
+                            </a>
+                            <a href="/" class="btn">
+                                <i class="fas fa-home"></i> Back to Home
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            loadCheckout();
+        });
+    </script>
+</body>
+</html>

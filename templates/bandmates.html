@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandmates - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+    
+    <style>
+        .bandmates-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #1a0000, #000000);
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .page-title h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .page-title p {
+            color: #ccc;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .bandmates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .bandmate-card {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            cursor: pointer;
+            height: 500px;
+        }
+        
+        .bandmate-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+        
+        .bandmate-card.active {
+            border-color: #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+        
+        .bandmate-photo {
+            height: 350px;
+            width: 100%;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bandmate-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.9) 100%);
+        }
+        
+        .bandmate-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .bandmate-card:hover .bandmate-photo img {
+            transform: scale(1.05);
+        }
+        
+        .selection-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #ff0000;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .bandmate-card.active .selection-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .bandmate-name {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .bandmate-name h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        .bandmate-name p {
+            color: #ff0000;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+        
+        .info-panel {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            min-height: 300px;
+        }
+        
+        .info-content {
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .info-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #ff0000;
+        }
+        
+        .info-header h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            margin-right: auto;
+        }
+        
+        .info-role {
+            background-color: #ff0000;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .info-body {
+            color: #ccc;
+            line-height: 1.8;
+        }
+        
+        .info-body p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            color: #ff0000;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #aaa;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+        
+        .back-navigation {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+        }
+        
+        .flame-separator {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .flame-separator i {
+            color: #ff3300;
+            font-size: 1.5rem;
+            animation: flame 1.5s infinite alternate;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .bandmates-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .info-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .bandmate-card {
+                height: 450px;
+            }
+            
+            .bandmate-photo {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link active"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="bandmates-page">
+        <div class="page-title">
+            <h1>THE SIX FLAMES</h1>
+            <p>The legendary members of Rammstein. Click on any member to learn more about them.</p>
+        </div>
+        
+        <div class="flame-separator">
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+        </div>
+        
+        <div class="bandmates-grid">
+            <div class="bandmate-card" data-member="till">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/till.png" alt="Till Lindemann" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=TILL+LINDEMANN'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Till Lindemann</h3>
+                    <p>Frontman • Vocals</p>
+                </div>
+            </div>
+            
+            <div class="bandmate-card" data-member="richard">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/richard.png" alt="Richard Z. Kruspe" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=RICHARD+Z.+KRUSPE'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Richard Z. Kruspe</h3>
+                    <p>Lead Guitar • Backing Vocals</p>
+                </div>
+            </div>
+            
+            <div class="bandmate-card" data-member="paul">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/paul.png" alt="Paul H. Landers" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=PAUL+H.+LANDERS'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Paul H. Landers</h3>
+                    <p>Rhythm Guitar • Backing Vocals</p>
+                </div>
+            </div>
+            
+            <div class="bandmate-card" data-member="oliver">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/oliver.png" alt="Oliver Riedel" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=OLIVER+RIEDEL'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Oliver Riedel</h3>
+                    <p>Bass Guitar</p>
+                </div>
+            </div>
+
+            <div class="bandmate-card" data-member="christian">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/christian.png" alt="Christian Lorenz" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=CHRISTIAN+LORENZ'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Christian Lorenz</h3>
+                    <p>Keyboards • Synthesizers</p>
+                </div>
+            </div>
+            
+            <div class="bandmate-card" data-member="christoph">
+                <div class="selection-indicator">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="bandmate-photo">
+                    <img src="/static/img/bandmates/christoph.png" alt="Christoph Schneider" onerror="this.src='https://via.placeholder.com/300x350/222/ff0000?text=CHRISTOPH+SCHNEIDER'">
+                </div>
+                <div class="bandmate-name">
+                    <h3>Christoph Schneider</h3>
+                    <p>Drums • Percussion</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <div class="info-content active" id="info-till">
+                <div class="info-header">
+                    <h2>Till Lindemann</h2>
+                    <span class="info-role">Vocals • Lyricist • Frontman</span>
+                </div>
+                <div class="info-body">
+                    <p>German vocalist, poet, songwriter and frontman of the metal bands Rammstein, Lindemann, Till Lindemann and Na Chui. Has been involved in recording some songs by Apocalyptica, Phantom Vision, Puhdys, Knorkator and Emigrate, as well as by Kovacs, Zaz and others.</p>
+                    <p>Lindemann became the frontman of the newly formed band Rammstein in 1994 in Berlin. Prior to that, he played drums in the punk rock band First Arsch and was invited to join the band Feeling B, but he did not accept the offer.</p>
+                    <p>Lindemann studied carpentry and later became a carpenter and basket maker. He was interested in sports from a young age. In 1978, he was a member of the GDR national team at the European Junior Swimming Championships. </p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1963</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Albums</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">30+</span>
+                            <span class="stat-label">Years in Band</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-content" id="info-richard">
+                <div class="info-header">
+                    <h2>Richard Z. Kruspe</h2>
+                    <span class="info-role">Lead Guitar • Backing Vocals</span>
+                </div>
+                <div class="info-body">
+                    <p>He is a German musician, best known as the guitarist and co-founder of the German industrial metal band Rammstein and the leader of the Emigrate project.</p>
+                    <p>Before Rammstein, Krüse was a member of the bands Das Elegante Chaos and Orgasm Death Gimmick.
+By the age of twenty, Krüse had completed his musical education at a jazz school in the GDR. Currently, he is the only member of Rammstein with a musical background.
+Richard's dream was to create his own band. To achieve this, he moved to Berlin.</p>
+                    <p>As a young man, he was greatly influenced by bands such as AC/DC and Kiss.
+                        "One day I drew the name "KISS" in my notebook, which was strictly forbidden," Richard recalls. "So I was reprimanded in the courtyard in front of the entire school. But after that, I liked KISS even more."
+                    </p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1967</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Co-Founder</span>
+                            <span class="stat-label">Role</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Emigrate</span>
+                            <span class="stat-label">Side Project</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-content" id="info-paul">
+                <div class="info-header">
+                    <h2>Paul H. Landers</h2>
+                    <span class="info-role">Rhythm Guitar • Backing Vocals</span>
+                </div>
+                <div class="info-body">
+                    <p>German musician, rhythm guitarist of the band Rammstein. He previously participated in the punk rock band Feeling B, which influenced the alternative music scene in the GDR between 1983 and early 1989 and recorded the first official punk album by the state label Amiga shortly before the fall of the Berlin Wall.</p>
+                    <p>In 1994, Lindemann, Krüспе, Schneider and bassist Oliver Riedel take part in the Berlin Senate Metro Beat Contest festival and become winners. This allows them to record 4 demotracks in a professional studio. Landers and Flake soon join them and the newly formed band takes the name Rammstein. According to Till Lindemann, Landers worked a lot in the recording studio in the early days of the band. Among other things, he was responsible for the arrangements and supported Lindemann in writing lyrics and performing. According to Lindemann, the fist-punches on the hips and knees, which are characteristic of today's Rammstein singer, became an element of the show at Landers' suggestion.</p>
+                    <p>Haiko lived in Moscow on Gubkina Street for a year and attended a school at the GDR Embassy, where he learned Russian. He still speaks Russian well, demonstrating his knowledge in interviews with Russian TV channels[1] and at concerts in Russia, but he cannot write or read it.</p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1964</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">East Berlin</span>
+                            <span class="stat-label">Origin</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Feeling B</span>
+                            <span class="stat-label">Previous Band</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-content" id="info-oliver">
+                <div class="info-header">
+                    <h2>Oliver Riedel</h2>
+                    <span class="info-role">Bass Guitar</span>
+                </div>
+                <div class="info-body">
+                    <p>He is a German musician, best known as the bass guitarist for the German band Rammstein.</p>
+                    <p>He lived in an apartment with his future bandmates Richard Kruspe and Christoph Schneider. At this time, he received an offer from The Inchtabokatables to replace their pregnant bassist Franzi Underdrive (aka Franziska Schubert). From 1992 to 1994 he was a member of the band The Inchtabokatables. Together with his roommates, Riedel created a new band project called Tempelprayers, which later evolved into Rammstein. Ridel is currently one of the founders of the sextet.</p>
+                    <p>He is passionate about extreme sports, such as surfing. The calm side of his personality is reflected in his hobbies of professional photography and yoga. Riedel started playing the bass guitar when he was around 20 years old. He is married to designer, stylist and artist Marie Ridel. Lives in Berlin.</p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1971</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Tallest</span>
+                            <span class="stat-label">In the Band</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">The Inchtabokatables</span>
+                            <span class="stat-label">Previous Band</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-content" id="info-christian">
+                <div class="info-header">
+                    <h2>Christian Lorenz</h2>
+                    <span class="info-role">Keyboards • Synthesizers</span>
+                </div>
+                <div class="info-body">
+                    <p>He is a German musician, best known as the keyboardist for the German industrial metal band Rammstein.</p>
+                    <p>He worked as a loader at a slaughterhouse, then trained as a toolmaker. Together with Paul Landers and Christoph Schneider, he later became the most professional musician in Rammstein, having previously been a member of Feeling B, a band that made a name for itself in East Germany before the fall of the Berlin Wall. They were one of the first German punk bands to release a CD in 1989. The band went on to release two more albums and videos.</p>
+                    <p>According to Lorenz, after the fall of the Berlin Wall and the introduction of the German mark, his earnings as a musician were not sufficient, so he agreed to participate in government-sponsored missile defense activities. He founded a non-profit association with his friends and managed, among other things, an art gallery that had only moderate success, where he and his colleagues exhibited their paintings. Christian Lorenz has been married for the second time since 2008 to artist Jenny Rosemeyer.</p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1966</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">"Flake"</span>
+                            <span class="stat-label">Nickname</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Classical Training</span>
+                            <span class="stat-label">Background</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-content" id="info-christoph">
+                <div class="info-header">
+                    <h2>Christoph Schneider</h2>
+                    <span class="info-role">Drums • Percussion</span>
+                </div>
+                <div class="info-body">
+                    <p>German rock musician, nicknamed "Doom", best known as the drummer for the industrial metal band Rammstein.</p>
+                    <p>Schneider began his professional career in neighborhood bands, where he performed with his friends. Christoph tried to learn drums professionally, but failed the entrance test. He excelled in drumming, but struggled with piano, singing, and music theory. Without proper education, Schneider taught himself drums based on his favorite music.</p>
+                    <p>In 1984, Christoph, the only member of Rammstein, served in the army. After returning from the army, he worked for a telecommunications company as a laborer and spent two years as a loader at a mountain weather station. After returning to music, he played drums in the bands Keine Ahnung, Frechheit, and Die Firma, where he played with Richard Круспе, as well as Feeling B. It was there that he met Paul Landers and Christian Lorenz, his future bandmates in Rammstein.</p>
+                    
+                    <div class="info-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1966</span>
+                            <span class="stat-label">Year of Birth</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">"Doom"</span>
+                            <span class="stat-label">Nickname</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Army Service</span>
+                            <span class="stat-label">Before Music</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flame-separator">
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+            <i class="fas fa-fire"></i>
+        </div>
+        
+        <div class="back-navigation">
+            <a href="/" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+    
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const bandmateCards = document.querySelectorAll('.bandmate-card');
+            const infoContents = document.querySelectorAll('.info-content');
+            
+            function activateBandmate(memberId) {
+                bandmateCards.forEach(card => {
+                    card.classList.remove('active');
+                });
+                
+                infoContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                const selectedCard = document.querySelector(`.bandmate-card[data-member="${memberId}"]`);
+                if (selectedCard) {
+                    selectedCard.classList.add('active');
+                }
+                
+                const selectedInfo = document.getElementById(`info-${memberId}`);
+                if (selectedInfo) {
+                    selectedInfo.classList.add('active');
+                }
+            }
+            
+            bandmateCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const memberId = this.getAttribute('data-member');
+                    activateBandmate(memberId);
+                    
+                    document.querySelector('.info-panel').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+            });
+            
+            bandmateCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(-10px)';
+                        this.style.borderColor = '#ff3333';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'translateY(0)';
+                        this.style.borderColor = 'transparent';
+                    }
+                });
+            });
+            
+            activateBandmate('till');
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

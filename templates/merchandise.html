@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchandise - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+
+    <style>
+        .cart-indicator {
+            position: relative;
+            margin-left: 2rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff0000;
+            color: white;
+            font-size: 0.8rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .merchandise-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #0a0000, #000000);
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-title h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .page-title p {
+            color: #ccc;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding: 0 2rem;
+        }
+        
+        .category-btn {
+            background: rgba(30, 30, 30, 0.9);
+            color: #fff;
+            border: 2px solid #333;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+        
+        .product-card {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 280px;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1rem;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .product-category {
+            color: #ff0000;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        
+        .product-description {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            min-height: 60px;
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .product-price {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        .add-to-cart {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-cart:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(255, 0, 0, 0.3);
+        }
+        
+        .add-to-cart:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff0000;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(255,0,0,0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .page-title h1 { font-size: 2.5rem; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+            .categories { flex-direction: column; align-items: center; }
+            .category-btn { width: 80%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/shop/merchandise" class="nav-link active"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+                <li class="cart-indicator">
+                    <a href="/shop/cart" class="nav-link cart-link">
+                        <i class="fas fa-shopping-cart"></i> CART
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="merchandise-page">
+        <div class="page-title">
+            <h1>OFFICIAL MERCHANDISE</h1>
+            <p>Official Rammstein apparel and accessories in the iconic style.</p>
+        </div>
+        <div class="categories">
+            <button class="category-btn active" data-category="all">All Products</button>
+            <button class="category-btn" data-category="clothing">Clothing</button>
+            <button class="category-btn" data-category="accessories">Accessories</button>
+            <button class="category-btn" data-category="music">Music</button>
+            <button class="category-btn" data-category="special">Special Editions</button>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+        </div>
+
+        <div style="text-align: center; margin: 3rem 0;">
+            <a href="/" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let allProducts = [];
+            const productsGrid = document.getElementById('productsGrid');
+            const cartCount = document.getElementById('cartCount');
+            
+            function showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.style.background = type === 'success' ? '#ff0000' : '#cc0000';
+                
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                    <span>${message}</span>
+                    <a href="/shop/cart" style="color: white; text-decoration: underline; margin-left: 10px;">
+                        View Cart
+                    </a>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            
+            async function loadProducts() {
+                try {
+                    const response = await fetch('/shop/api/products');
+                    if (!response.ok) throw new Error('Failed to load products');
+                    
+                    allProducts = await response.json();
+                    displayProducts(allProducts);
+                } catch (error) {
+                    console.error('Error:', error);
+                    productsGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #ff0000;">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            <h3>Error loading products</h3>
+                            <p>Please try again later</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            function displayProducts(products) {
+                productsGrid.innerHTML = '';
+                
+                if (products.length === 0) {
+                    productsGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #ccc;">
+                            <i class="fas fa-box-open fa-2x"></i>
+                            <h3>No products found</h3>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.setAttribute('data-category', product.category);
+                    productCard.setAttribute('data-id', product.id);
+                    
+                    let badge = '';
+                    if (product.stock < 5 && product.stock > 0) {
+                        badge = '<div class="product-badge" style="background: #ff9900;">LOW STOCK</div>';
+                    } else if (product.stock === 0) {
+                        badge = '<div class="product-badge" style="background: #666;">SOLD OUT</div>';
+                    } else if (product.category === 'special') {
+                        badge = '<div class="product-badge">LIMITED</div>';
+                    }
+                    
+                    const placeholder = "https://via.placeholder.com/300x300/222/ff0000?text=RAMMSTEIN";
+                    const imageUrl = product.image_url || placeholder;
+                    
+                    productCard.innerHTML = `
+                        ${badge}
+                        <div class="product-image">
+                            <img src="${imageUrl}" 
+                                 class="product-img" 
+                                 alt="${product.name}"
+                                 onerror="this.onerror=null; this.src='${placeholder}'">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <span class="product-category">${product.category.toUpperCase()}</span>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-footer">
+                                <div class="product-price">€${product.price.toFixed(2)}</div>
+                                <button class="add-to-cart" 
+                                        data-id="${product.id}" 
+                                        ${product.stock === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-cart-plus"></i> 
+                                    ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    productsGrid.appendChild(productCard);
+                });
+                
+                document.querySelectorAll('.add-to-cart:not([disabled])').forEach(button => {
+                    button.addEventListener('click', addToCartHandler);
+                });
+            }
+            
+            async function addToCartHandler(event) {
+                const button = event.currentTarget;
+                const productId = button.getAttribute('data-id');
+                const product = allProducts.find(p => p.id == productId);
+                
+                if (!product || product.stock <= 0) {
+                    showNotification('This product is out of stock!', 'error');
+                    return;
+                }
+                
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+                button.disabled = true;
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('product_id', productId);
+                    formData.append('quantity', '1');
+                    
+                    const response = await fetch('/shop/api/cart/add', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        await updateCartCount();
+                        showNotification(`${product.name} added to cart!`);
+                        
+                        button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                        button.style.background = '#00aa00';
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.style.background = '';
+                            button.disabled = false;
+                        }, 1500);
+                    } else {
+                        throw new Error(result.error || 'Failed to add to cart');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showNotification('Failed to add item to cart', 'error');
+                    
+                    button.innerHTML = '<i class="fas fa-times"></i> Error';
+                    button.style.background = '#cc0000';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                        button.disabled = false;
+                    }, 2000);
+                }
+            }
+            
+            async function updateCartCount() {
+                try {
+                    const response = await fetch('/shop/api/cart');
+                    const cart = await response.json();
+                    cartCount.textContent = cart.item_count || 0;
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                }
+            }
+            
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    
+                    if (category === 'all') {
+                        displayProducts(allProducts);
+                    } else {
+                        const filtered = allProducts.filter(p => p.category === category);
+                        displayProducts(filtered);
+                    }
+                });
+            });
+            
+            loadProducts();
+            updateCartCount();
+            
+        });
+    </script>
+</body>
+</html>

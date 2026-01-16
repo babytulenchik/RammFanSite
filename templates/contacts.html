@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts - R A M M S T E I N</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:Arial;font-weight:bold;fill:%23ff0000}</style><text y='70' font-size='70'>R</text></svg>">
+
+    <style>
+        .contacts-page {
+            padding: 2rem 0;
+            background: linear-gradient(to bottom, #000000, #0a0000, #000000);
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 0 1rem;
+        }
+        
+        .page-header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            color: #ccc;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contacts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .contact-card {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .contact-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.2);
+        }
+        
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            border: 2px solid #ff0000;
+        }
+        
+        .contact-icon i {
+            font-size: 2.5rem;
+            color: #ff0000;
+        }
+        
+        .contact-card h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .contact-card p {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .contact-link {
+            display: inline-block;
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        .contact-link:hover {
+            color: white;
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .social-section {
+            text-align: center;
+            margin: 4rem 0;
+            padding: 3rem;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            border: 2px solid #333;
+        }
+        
+        .social-title {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+        
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .social-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .social-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-5px);
+            background: rgba(255, 0, 0, 0.05);
+        }
+        
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .social-card h4 {
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .social-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .social-link {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: white;
+        }
+        
+        .form-section {
+            margin: 4rem 0;
+            padding: 3rem;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            border: 2px solid #333;
+        }
+        
+        .form-title {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 576px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background: #cc0000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .info-section {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 0, 0, 0.05);
+            border-radius: 15px;
+            margin: 4rem 0;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+        
+        .info-title {
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+        
+        .info-content {
+            color: #ccc;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .contact-card,
+            .social-section,
+            .form-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+                <li><a href="/bandmates" class="nav-link"><i class="fas fa-users"></i> BANDMATES</a></li>
+                <li><a href="/history" class="nav-link"><i class="fas fa-book"></i> HISTORY</a></li>
+                <li><a href="/shop/merchandise" class="nav-link"><i class="fas fa-tshirt"></i> MERCHANDISE</a></li>
+                <li><a href="/tickets" class="nav-link"><i class="fas fa-ticket-alt"></i> TICKETS</a></li>
+                <li><a href="/contacts" class="nav-link active"><i class="fas fa-envelope"></i> CONTACTS</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="contacts-page">
+        <div class="page-header">
+            <h1>CONTACT & SOCIAL</h1>
+            <p>Connect with Rammstein through official channels and social media.</p>
+        </div>
+        
+        <div class="contacts-container">
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>FAN SUPPORT</h3>
+                    <p>For fan club inquiries, merchandise questions, and general support.</p>
+                    <a href="mailto:support@rammstein.de" class="contact-link">
+                        <i class="fas fa-envelope"></i> support@rammstein.de
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>BUSINESS</h3>
+                    <p>For booking, licensing, press, and other business inquiries.</p>
+                    <a href="mailto:business@rammstein.de" class="contact-link">
+                        <i class="fas fa-envelope"></i> business@rammstein.de
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>MUSIC & LABEL</h3>
+                    <p>For music licensing, collaborations, and label-related matters.</p>
+                    <a href="mailto:music@rammstein.de" class="contact-link">
+                        <i class="fas fa-envelope"></i> music@rammstein.de
+                    </a>
+                </div>
+            </div>
+            
+            <div class="social-section">
+                <h2 class="social-title">FOLLOW RAMMSTEIN</h2>
+                <div class="social-grid">
+                    <div class="social-card">
+                        <i class="fab fa-youtube social-icon" style="color: #FF0000;"></i>
+                        <h4>YouTube</h4>
+                        <p>Official music videos, live performances, behind the scenes</p>
+                        <a href="https://www.youtube.com/@RammsteinOfficial" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Visit Channel
+                        </a>
+                    </div>
+                    
+                    <div class="social-card">
+                        <i class="fab fa-instagram social-icon" style="color: #E4405F;"></i>
+                        <h4>Instagram</h4>
+                        <p>Latest photos, tour updates, and band moments</p>
+                        <a href="https://www.instagram.com/richard_von_rammstein/" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Follow
+                        </a>
+                    </div>
+                    
+                    <div class="social-card">
+                        <i class="fab fa-twitter social-icon" style="color: #1DA1F2;"></i>
+                        <h4>Twitter / X</h4>
+                        <p>Official announcements and updates from the band</p>
+                        <a href="http://twitter.com/RSprachrohr" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Follow
+                        </a>
+                    </div>
+                    
+                    <div class="social-card">
+                        <i class="fab fa-facebook social-icon" style="color: #1877F2;"></i>
+                        <h4>Facebook</h4>
+                        <p>Community, events, and official announcements</p>
+                        <a href="https://www.facebook.com/Rammstein/" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Like Page
+                        </a>
+                    </div>
+                    
+                    <div class="social-card">
+                        <i class="fab fa-spotify social-icon" style="color: #1DB954;"></i>
+                        <h4>Spotify</h4>
+                        <p>Stream all albums and latest releases</p>
+                        <a href="https://open.spotify.com/artist/6wWVKhxIU2cEi0K81v7HvP" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Listen
+                        </a>
+                    </div>
+                    
+                    <div class="social-card">
+                        <i class="fab fa-tiktok social-icon" style="color: #000000;"></i>
+                        <h4>TikTok</h4>
+                        <p>Short videos, memes, and fan content</p>
+                        <a href="https://www.tiktok.com/@rammstein" 
+                           target="_blank" 
+                           class="social-link">
+                            <i class="fas fa-external-link-alt"></i> Follow
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="form-title">SEND A MESSAGE</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a topic</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="fan-club">Fan Club (LIFAD)</option>
+                            <option value="merchandise">Merchandise Question</option>
+                            <option value="music">Music & Licensing</option>
+                            <option value="tickets">Ticket Support</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+            
+            <div class="info-section">
+                <h3 class="info-title">OFFICIAL CONTACT INFORMATION</h3>
+                <div class="info-content">
+                    <p><strong>Mailing Address:</strong> Rammstein GmbH, Universal Music GmbH, Stralauer Allee 1, 10245 Berlin, Germany</p>
+                    <p><strong>Management:</strong><strong>Offizielle Rechtsvertretung:</strong> Universal Music GmbH</p>
+                    <p><strong>Note:</strong> This is a fan-made website for educational purposes. For official contact, please use the channels above.</p>
+                </div>
+            </div>
+            
+            
+            <div style="text-align: center; margin: 3rem 0;">
+                <a href="/" class="btn">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>All rights belong to Rammstein and their respective owners.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const cartCount = document.getElementById('cartCount');
+            
+            async function updateCartCount() {
+                try {
+                    const response = await fetch('/shop/api/cart');
+                    const cart = await response.json();
+                    cartCount.textContent = cart.item_count || 0;
+                } catch (error) {
+                    console.error('Error updating cart count:', error);
+                }
+            }
+            
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(contactForm);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message')
+                };
+                
+                const submitBtn = contactForm.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Message sent successfully!\n\n' +
+                         'Thank you for your message.');
+                    
+                    contactForm.reset();
+                    
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 1500);
+            });
+            
+            updateCartCount();
+            
+            document.querySelectorAll('.contact-card, .social-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('hover')) {
+                        this.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.contact-icon, .social-icon').forEach((icon, index) => {
+                    icon.style.opacity = '0';
+                    icon.style.transform = 'scale(0.8) translateY(20px)';
+                    
+                    setTimeout(() => {
+                        icon.style.transition = 'all 0.5s ease';
+                        icon.style.opacity = '1';
+                        icon.style.transform = 'scale(1) translateY(0)';
+                    }, index * 100);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
