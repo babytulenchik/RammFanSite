@@ -1,0 +1,4 @@
+This is my website dedicated to my dear Rammstein band members. Just out of love for them, I decided to make a website for them using the Python programming language, the Fastapi web framework, and the Uvicorn ASGI server. This website is just a project for my thesis, and all the information is taken from Wikipedia and the official Rammstein store. Everything related to Rammstein on this website belongs to them.
+
+
+Это мой сайт посвященный мои дорогим участникам группы Rammstein. Просто из любви к ним я решила сделать для них сайт на языке программирования Python c  веб-фреймворком Fastapi и ASGI-сервером Uvicorn. Этот сайт представляет собой лишь работу для моего диплома, вся информация взята с wikipedia и официального магазина Rammstein. Все что связано с Rammstein на этом сайте принадлежит только им.
