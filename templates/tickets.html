@@ -701,7 +701,7 @@
     
     <footer class="footer">
         <div class="footer-content">
-            <p>© 2026 Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
+            <p>Rammstein Fan Site. This is a fan-made project for educational purposes.</p>
             <p>All rights belong to Rammstein and their respective owners.</p>
         </div>
     </footer>
@@ -1074,11 +1074,10 @@
                 
                 const total = prices[ticketType] * quantity;
                 
-                alert(`🎫 Purchase Successful!\n\n` +
+                alert(`Purchase Successful!\n\n` +
                       `Concert: ${currentConcert.title}\n` +
                       `Tickets: ${quantity}x ${ticketNames[ticketType]}\n` +
-                      `Total: €${total.toFixed(2)}\n\n` +
-                      `An email confirmation has been sent to you.`);
+                      `Total: €${total.toFixed(2)}\n\n`);
                 
                 closeTicketModal();
             }

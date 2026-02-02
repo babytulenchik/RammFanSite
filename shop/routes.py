@@ -6,6 +6,7 @@ import uuid
 from database import get_db
 from shop.cart_logic import CartManager
 from config import config
+from models import Product
 
 router = APIRouter(prefix="/shop", tags=["shop"])
 templates = Jinja2Templates(directory="templates")

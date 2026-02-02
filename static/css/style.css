@@ -1,4 +1,3 @@
-/* Основные стили в стиле Rammstein */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Hero секция с видео */
 .hero {
     position: relative;
     height: 100vh;
@@ -129,7 +127,6 @@ body {
     transform: translateY(-3px);
 }
 
-/* Основной контент */
 .container {
     max-width: 1200px;
     margin: 3rem auto;
@@ -192,7 +189,6 @@ body {
     animation-delay: 0.4s;
 }
 
-/* Секция с альбомом */
 .album-section {
     margin-bottom: 4rem;
 }
@@ -269,7 +265,6 @@ body {
     box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
 }
 
-/* Футер */
 .footer {
     background-color: #111;
     padding: 3rem 0;
@@ -300,7 +295,6 @@ body {
     transform: translateY(-5px);
 }
 
-/* Анимации */
 @keyframes flicker {
     0%, 18%, 22%, 25%, 53%, 57%, 100% {
         text-shadow:
@@ -337,7 +331,6 @@ body {
     }
 }
 
-/* Адаптивность */
 @media (max-width: 992px) {
     .rammstein-title {
         font-size: 4rem;

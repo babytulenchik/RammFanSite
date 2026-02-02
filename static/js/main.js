@@ -1,4 +1,4 @@
-// Плавная прокрутка для кнопки "скролл вниз"
+
 document.querySelector('.scroll-down').addEventListener('click', function(e) {
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
@@ -8,7 +8,6 @@ document.querySelector('.scroll-down').addEventListener('click', function(e) {
     });
 });
 
-// Добавление эффекта при скролле для навигации
 window.addEventListener('scroll', function() {
     const nav = document.querySelector('.main-nav');
     if (window.scrollY > 50) {
@@ -18,7 +17,6 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Простой эффект для навигационных ссылок
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-3px)';
